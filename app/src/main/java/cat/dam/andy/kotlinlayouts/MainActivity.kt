@@ -10,14 +10,11 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -75,14 +72,16 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -117,6 +116,8 @@ class MainActivity : ComponentActivity() {
             //ShowRow()
             //WeightedColumnExample()
             //WeightedRowExample()
+            //ShowSpacerExample()
+            //ShowCardExample()
             //ShowScrollableColumnAndRowExample()
             //ShowLazyTable()
             //ShowLazyGrid()
@@ -427,6 +428,103 @@ fun WeightedRowExample() {
 }
 
 @Composable
+fun ShowSpacerExample() {
+    data class Product(val name: String, val price: String)
+    //afegeix alguns productes
+    val products = listOf(
+        Product("Producte 1", "19.99€"),
+        Product("Producte 2", "29.99€"),
+        Product("Producte 3", "14.99€"),
+    )
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize()
+    ) {
+        products.forEach { product ->
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .background(Color.LightGray, shape = MaterialTheme.shapes.medium)
+                    .border(1.dp, Color.Gray, shape = MaterialTheme.shapes.medium)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "(IMATGE ${product.name})",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.weight(1f)
+                    )
+                    // Espaia horitzontal entre la imatge i el text
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    // Informació del producte
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(text = product.name, style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            text = "Preu: ${product.price}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+                // Espai vertical entre els productes
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun ShowCardExample() {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxSize()
+    ) {
+        repeat(4) { index ->
+            Card(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.Cyan,
+                    contentColor = Color.Black,
+                    disabledContainerColor = Color.LightGray,
+                    disabledContentColor = Color.Gray,
+                ),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 10.dp
+                ),
+                shape = RoundedCornerShape(20.dp),
+                border = BorderStroke(2.dp, Color.Black)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = "Títol de la Targeta $index",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Contingut de la targeta $index",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+    }
+}
+
+@Composable
 fun ShowScrollableColumnAndRowExample() {
     Column(
         modifier = Modifier
@@ -595,6 +693,7 @@ fun InvoiceItem(invoice: Invoice) {
     }
 }
 
+
 @Composable
 fun SimpleBoxes() {
     Box(
@@ -758,7 +857,6 @@ fun ShowBoxWithConstraintsExample() {
         }
     }
 }
-
 
 @Composable
 fun ShowConstraintLayout() {
@@ -1215,8 +1313,11 @@ fun TopAppBarContent(context: Context) {
 @Composable
 fun BottomAppBarContent(context: Context) {
     BottomAppBar(
-        modifier = Modifier.clickable {
-                Toast.makeText(context, "BottomAppBar clicked", Toast.LENGTH_SHORT).show()
+        modifier = Modifier
+            .clickable {
+                Toast
+                    .makeText(context, "BottomAppBar clicked", Toast.LENGTH_SHORT)
+                    .show()
             }
             .padding(8.dp),
         containerColor = Color.Gray,
@@ -1253,7 +1354,11 @@ fun ScaffoldContent(innerPadding: PaddingValues, context: Context) {
             .padding(innerPadding)
             .fillMaxSize()
             .background(Color.Green)
-            .clickable {Toast.makeText(context, "Content clicked", Toast.LENGTH_SHORT).show()}
+            .clickable {
+                Toast
+                    .makeText(context, "Content clicked", Toast.LENGTH_SHORT)
+                    .show()
+            }
     )
 }
 
@@ -1391,6 +1496,7 @@ fun MyScaffoldLayout() {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar(onIconClick: () -> Unit) {
@@ -1398,9 +1504,7 @@ fun MyTopAppBar(onIconClick: () -> Unit) {
         IconButton(onClick = {
             onIconClick()
         }) {
-            Icon(
-                imageVector = Icons.Default.Menu, contentDescription = "Open Navigation Items"
-            )
+            Icon(imageVector = Icons.Default.Menu, contentDescription = "Open Navigation Items")
         }
     }, colors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.secondaryContainer
